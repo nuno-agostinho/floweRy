@@ -1,0 +1,50 @@
+version: "3"
+services:
+  # celery + flower + related services
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+
+  celery:
+    container_name: celery
+    build: ./celery
+    command: celery -A tasks worker -l info -E
+    volumes:
+      - ./celery:/celery
+      - ./celery/data:/data
+    depends_on:
+      - redis
+
+  flower:
+    container_name: flower
+    image: mher/flower
+    command: celery -A tasks flower
+    volumes:
+      - ./celery:/celery
+    working_dir: /celery
+    ports:
+      - 5555:5555
+    environment:
+      CELERY_BROKER_URL: redis://redis
+      CELERY_RESULT_BACKEND: redis://redis
+    depends_on:
+      - celery
+      - redis
+
+  rstudio-server:
+    container_name: rstudio-server
+    build: ./rstudio-server
+    ports:
+      - 8787:8787
+    environment:
+      - DISABLE_AUTH=true
+    volumes:
+      - .:/home/rstudio/floweRy
