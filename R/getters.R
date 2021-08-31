@@ -50,10 +50,17 @@ taskList <- function(limit=NULL, offset=NULL,
                    workername=workername, taskname=taskname, state=state,
                    received_start=received_start, received_end=received_end,
                    url=url)
-    # Replace NULL with NA
+
+    timestamps <- c("received", "started", "succeeded", "timestamp", "revoked")
+    convertTime <- function(x) as.POSIXct(x, origin="1970-01-01")
+
     for (task in names(res)) {
+        # Replace NULL with NA
         nulls <- vapply(res[[task]], is.null, logical(1))
         res[[task]][nulls] <- NA
+
+        # Replace Unix timestamp with formatted time
+        res[[task]][timestamps] <- lapply(res[[task]][timestamps], convertTime)
     }
 
     # Create table
@@ -61,8 +68,12 @@ taskList <- function(limit=NULL, offset=NULL,
         cols <- unique(unlist(lapply(res, names)))
         df   <- data.frame(matrix(ncol=length(cols), nrow=length(res),
                                   dimnames=list(names(res), cols)))
-        for (col in cols) df[[col]] <- sapply(res, "[[", col)
-        res  <- df
+        for (col in cols) {
+            values <- sapply(res, "[[", col)
+            if (col %in% timestamps) values <- convertTime(values)
+            df[[col]] <- values
+        }
+        res <- df
     }
     return(res)
 }
