@@ -2,3 +2,4 @@ celery
 rstudio-server
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
