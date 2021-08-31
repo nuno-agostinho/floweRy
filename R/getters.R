@@ -50,8 +50,20 @@ taskList <- function(limit=NULL, offset=NULL,
                    workername=workername, taskname=taskname, state=state,
                    received_start=received_start, received_end=received_end,
                    url=url)
-    # TODO: replace NULL with NA in list of lists?
-    if (table) res <- as.data.frame(do.call(rbind, res))
+    # Replace NULL with NA
+    for (task in names(res)) {
+        nulls <- vapply(res[[task]], is.null, logical(1))
+        res[[task]][nulls] <- NA
+    }
+
+    # Create table
+    if (table) {
+        cols <- unique(unlist(lapply(res, names)))
+        df   <- data.frame(matrix(ncol=length(cols), nrow=length(res),
+                                  dimnames=list(names(res), cols)))
+        for (col in cols) df[[col]] <- sapply(res, "[[", col)
+        res  <- df
+    }
     return(res)
 }
 
