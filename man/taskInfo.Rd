@@ -2,22 +2,28 @@
 % Please edit documentation in R/getters.R
 \name{taskInfo}
 \alias{taskInfo}
-\title{Get a task info}
+\alias{taskResult}
+\title{Get a task info or results}
 \usage{
 taskInfo(id, url = getFlowerURL())
+
+taskResult(id, timeout = NULL, url = getFlowerURL())
 }
 \arguments{
 \item{id}{Character: task identifier}
 
 \item{url}{Character: Flower URL}
+
+\item{timeout}{Integer: seconds to wait before operation times out}
 }
 \value{
-List of active queues
+Information or results on tasks
 }
 \description{
-Get a task info
+Get a task info or results
 }
 \examples{
 task <- rownames(taskList())[[1]]
 taskInfo(task)
+taskResult(task)
 }

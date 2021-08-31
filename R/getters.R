@@ -1,10 +1,3 @@
-#' @importFrom httr GET content accept_json http_error
-getInfo <- function(type, ..., url=getFlowerURL()) {
-    get <- GET(url=url, path=paste0("/api/", type), query=list(...))
-    stop_for_status(get)
-    return(content(get))
-}
-
 #' List workers
 #'
 #' @param refresh Boolean: update list of workers
@@ -57,7 +50,8 @@ taskList <- function(limit=NULL, offset=NULL,
                    workername=workername, taskname=taskname, state=state,
                    received_start=received_start, received_end=received_end,
                    url=url)
-    if (table) res <- data.frame(do.call(rbind, res))
+    # TODO: replace NULL with NA in list of lists?
+    if (table) res <- as.data.frame(do.call(rbind, res))
     return(res)
 }
 
@@ -84,20 +78,35 @@ taskTypesList <- function(url=getFlowerURL()) {
 #' @examples
 #' queueLength()
 queueLength <- function(url=getFlowerURL()) {
-    getInfo(type="queues/length", url=url)
+    erros <- list("503"="result backend is not configured")
+    getInfo(type="queues/length", url=url, errors=errors)
 }
 
-#' Get a task info
+#' Get a task info or results
 #'
 #' @param id Character: task identifier
 #' @inheritParams workerList
 #'
-#' @return List of active queues
+#' @return Information or results on tasks
 #' @export
 #'
 #' @examples
 #' task <- rownames(taskList())[[1]]
 #' taskInfo(task)
 taskInfo <- function(id, url=getFlowerURL()) {
-    getInfo(type=paste0("task/info/", id), url=url)
+    errors <- list("404"="unknown task")
+    getInfo(type=file.path("task", "info", id), url=url, errors=errors)
+}
+
+#' @rdname taskInfo
+#' @param timeout Integer: seconds to wait before operation times out
+#'
+#' @export
+#'
+#' @examples
+#' taskResult(task)
+taskResult <- function(id, timeout=NULL, url=getFlowerURL()) {
+    errors <- list("503"="result backedn is not configured")
+    getInfo(type=file.path("task", "result", id), timeout=timeout, url=url,
+            errors=errors)
 }

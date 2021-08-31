@@ -3,6 +3,7 @@
 \name{taskApply}
 \alias{taskApply}
 \alias{taskAsyncApply}
+\alias{taskSend}
 \title{Execute a task}
 \usage{
 taskApply(task, args = NULL, kwargs = NULL, url = getFlowerURL())
@@ -14,6 +15,8 @@ taskAsyncApply(
   options = NULL,
   url = getFlowerURL()
 )
+
+taskSend(task, args = NULL, kwargs = NULL, url = getFlowerURL())
 }
 \arguments{
 \item{task}{Character: task to run}
@@ -33,9 +36,16 @@ Task information:
 }
 }
 \description{
-Execute a task
+Tasks can be executed using:
+\itemize{
+\item \code{taskApply()}: execute a task and wait for result (better for quick tasks)
+\item \code{taskAsyncApply()}: execute a task and immediately return task info without
+result (better for long-running tasks)
+\item \code{taskSend()}: execute a task (doesn't require task sources)
+}
 }
 \examples{
 taskApply("tasks.add")
 taskAsyncApply("tasks.add", args=list(a=1, b=2))
+taskSend("tasks.add", args=list(a=1, b=2))
 }
