@@ -1,3 +1,10 @@
+prepareArgs <- function(...) {
+    args <- list(...)
+    if (is.character(names(args))) stop("Arguments in '...' cannot have names.")
+    if (length(args) == 0) args <- NULL
+    return(args)
+}
+
 #' Execute a task
 #'
 #' Tasks can be executed using:
@@ -7,7 +14,7 @@
 #' - `taskSend()`: execute a task (doesn't require task sources)
 #'
 #' @param task Character: task to run
-#' @param args List of arguments
+#' @param ... List of arguments
 #' @param kwargs Dictionary of arguments
 #'
 #' @return Task information:
@@ -17,11 +24,11 @@
 #' @export
 #'
 #' @examples
-#' taskApply("tasks.add")
-taskApply <- function(task, args=NULL, kwargs=NULL, url=getFlowerURL()) {
+#' taskApply("tasks.add", 3, 8)
+taskApply <- function(task, ..., kwargs=NULL, url=getFlowerURL()) {
     errors <- list("404"="unknown task")
-    runTask(type="apply", task=task, args=args, kwargs=kwargs, url=url,
-            errors=errors)
+    runTask(type="apply", task=task, args=prepareArgs(...), kwargs=kwargs,
+            url=url, errors=errors)
 }
 
 #' @rdname taskApply
@@ -30,21 +37,27 @@ taskApply <- function(task, args=NULL, kwargs=NULL, url=getFlowerURL()) {
 #' @export
 #'
 #' @examples
-#' taskAsyncApply("tasks.add", args=list(a=1, b=2))
-taskAsyncApply <- function(task, args=NULL, kwargs=NULL, options=NULL,
+#' taskAsyncApply("tasks.add", 5, 7)
+taskAsyncApply <- function(task, ..., kwargs=NULL, options=NULL,
                            url=getFlowerURL()) {
+    args <- list(...)
+    if (length(args) == 0) args <- NULL
+    
     errors <- list("404"="unknown task")
-    runTask(type="async-apply", task=task,
-            args=args, kwargs=kwargs, options=options, url=url, errors=errors)
+    runTask(type="async-apply", task=task, args=prepareArgs(...), kwargs=kwargs,
+            options=options, url=url, errors=errors)
 }
 
 #' @rdname taskApply
 #' @export
 #'
 #' @examples
-#' taskSend("tasks.add", args=list(a=1, b=2))
-taskSend <- function(task, args=NULL, kwargs=NULL, url=getFlowerURL()) {
+#' taskSend("tasks.add", 1, 2)
+taskSend <- function(task, ..., kwargs=NULL, url=getFlowerURL()) {
+    args <- list(...)
+    if (length(args) == 0) args <- NULL
+    
     errors <- list("404"="unknown task")
-    runTask(type="send-task", task=task, args=args, kwargs=kwargs, url=url,
-            errors=errors)
+    runTask(type="send-task", task=task, args=prepareArgs(...), kwargs=kwargs,
+            url=url, errors=errors)
 }
