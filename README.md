@@ -18,6 +18,9 @@ change the default URL:
 options(flowerURL="http://flower:5555")
 ```
 
+If you are using flower with a custom URL prefix (e.g. `--url_prefix=flower`),
+include the prefix in the URL: `options(flowerURL="http://flower:5555/flower")`
+
 ## Run and manage tasks
 
 Tasks can be run in two ways:
