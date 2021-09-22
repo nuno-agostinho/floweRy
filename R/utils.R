@@ -14,7 +14,7 @@ simplifyAPIerror <- function(res, errors) {
 
 #' @importFrom httr GET content stop_for_status
 getInfo <- function(type, ..., url=getFlowerURL(), errors=NULL) {
-    res <- GET(url=url, path=file.path("api", type), query=list(...))
+    res <- GET(url=file.path(url, "api", type), query=list(...))
     simplifyAPIerror(res, errors)
     return(content(res))
 }
@@ -32,7 +32,7 @@ postAction <- function(type, action, id, ..., url=getFlowerURL(), errors=NULL) {
 runTask <- function(type="apply", task=NULL,
                     args=NULL, kwargs=NULL, options=NULL, url=getFlowerURL(),
                     errors=NULL) {
-    path <- file.path("api/task", type, task)
+    path <- file.path("api", "task", type, task)
 
     convert2list <- function (x) if (!is.null(x) && !is.list(x)) list(x) else x
     args    <- convert2list(args)
@@ -40,7 +40,7 @@ runTask <- function(type="apply", task=NULL,
     options <- convert2list(options)
 
     body <- list(args=args, kwargs=kwargs, options=options)
-    res  <- POST(url=url, path=path, body=body, encode="json")
+    res  <- POST(url=file.path(url, path), body=body, encode="json")
     simplifyAPIerror(res, errors)
     return(content(res))
 }
