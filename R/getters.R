@@ -10,10 +10,10 @@
 #'
 #' @examples
 #' workerList()
-#' workerList(refresh=TRUE)
+#' workerList(refresh=FALSE)
 #' workerList(status=TRUE) # only print worker status
 #' workerList(workername="celery@d2b3d2b64077")
-workerList <- function(refresh=FALSE, workername=NULL, status=FALSE,
+workerList <- function(refresh=TRUE, workername=NULL, status=FALSE,
                        url=getFlowerURL()) {
     getInfo(type="workers", refresh=refresh, workername=workername,
             status=status, url=url)
