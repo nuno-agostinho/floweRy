@@ -44,3 +44,16 @@ runTask <- function(type="apply", task=NULL,
     simplifyAPIerror(res, errors)
     return(content(res))
 }
+
+getTaskId <- function(id, attr=c("task-id", "uuid")) {
+    res <- id
+    if (is.list(id)) {
+        available <- attr %in% names(id)
+        if (any(available)) {
+            # Select only the first match
+            attr <- attr[available][[1]]
+            res  <- id[[attr]]
+        }
+    }
+    return(res)
+}

@@ -6,3 +6,4 @@ RUN R -e 'install.packages("devtools")'
 RUN R -e 'install.packages("roxygen")'
 
 Run apt-get install -y libgit2-dev
+

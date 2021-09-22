@@ -10,6 +10,7 @@
 #' task <- rownames(taskList())[[1]]
 #' taskAbort(task)
 taskAbort <- function(id, url=getFlowerURL()) {
+    id <- getTaskId(id)
     errors <- list("503"="result backedn is not configured")
     postAction(url=url, "task", "abort", id, errors=errors)
 }
@@ -23,6 +24,7 @@ taskAbort <- function(id, url=getFlowerURL()) {
 #' taskRevoke(task)
 taskRevoke <- function(id, terminate=TRUE, signal="SIGTERM",
                        url=getFlowerURL()) {
+    id <- getTaskId(id)
     postAction(url=url, "task", "revoke", id, terminate=terminate,
                signal=signal)
 }

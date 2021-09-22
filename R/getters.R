@@ -117,6 +117,7 @@ queueLength <- function(url=getFlowerURL()) {
 #' task <- rownames(taskList())[[1]]
 #' taskInfo(task)
 taskInfo <- function(id, url=getFlowerURL()) {
+    id <- getTaskId(id)
     errors <- list("404"="unknown task")
     getInfo(type=file.path("task", "info", id), url=url, errors=errors)
 }
@@ -129,6 +130,7 @@ taskInfo <- function(id, url=getFlowerURL()) {
 #' @examples
 #' taskResult(task)
 taskResult <- function(id, timeout=NULL, url=getFlowerURL()) {
+    id <- getTaskId(id)
     errors <- list("503"="result backedn is not configured")
     getInfo(type=file.path("task", "result", id), timeout=timeout, url=url,
             errors=errors)
