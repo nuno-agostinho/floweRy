@@ -5,7 +5,7 @@
 \title{List workers}
 \usage{
 workerList(
-  refresh = FALSE,
+  refresh = TRUE,
   workername = NULL,
   status = FALSE,
   url = getFlowerURL()
@@ -28,7 +28,7 @@ List workers
 }
 \examples{
 workerList()
-workerList(refresh=TRUE)
+workerList(refresh=FALSE)
 workerList(status=TRUE) # only print worker status
 workerList(workername="celery@d2b3d2b64077")
 }

@@ -6,22 +6,16 @@
 \alias{taskSend}
 \title{Execute a task}
 \usage{
-taskApply(task, args = NULL, kwargs = NULL, url = getFlowerURL())
+taskApply(task, ..., kwargs = NULL, url = getFlowerURL())
 
-taskAsyncApply(
-  task,
-  args = NULL,
-  kwargs = NULL,
-  options = NULL,
-  url = getFlowerURL()
-)
+taskAsyncApply(task, ..., kwargs = NULL, options = NULL, url = getFlowerURL())
 
-taskSend(task, args = NULL, kwargs = NULL, url = getFlowerURL())
+taskSend(task, ..., kwargs = NULL, url = getFlowerURL())
 }
 \arguments{
 \item{task}{Character: task to run}
 
-\item{args}{List of arguments}
+\item{...}{List of arguments}
 
 \item{kwargs}{Dictionary of arguments}
 
@@ -45,7 +39,7 @@ result (better for long-running tasks)
 }
 }
 \examples{
-taskApply("tasks.add")
-taskAsyncApply("tasks.add", args=list(a=1, b=2))
-taskSend("tasks.add", args=list(a=1, b=2))
+taskApply("tasks.add", 3, 8)
+taskAsyncApply("tasks.add", 5, 7)
+taskSend("tasks.add", 1, 2)
 }
